@@ -1,0 +1,31 @@
+{
+  "project_info": {
+    "project_number": "721244003399",
+    "firebase_url": "https://cheyyan-3dfb8-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "cheyyan-3dfb8",
+    "storage_bucket": "cheyyan-3dfb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721244003399:android:de4fbca830457b31e6a562",
+        "android_client_info": {
+          "package_name": "com.example.cheyyan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQKXHX8ioHHyKUWRpY_vz67nWYPUT4iJs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+

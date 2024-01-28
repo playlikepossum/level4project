@@ -1,6 +1,6 @@
 class Task {
   int? id;
-  String? title;
+  dynamic title;
   String? note;
   int? isCompleted;
   String? date;

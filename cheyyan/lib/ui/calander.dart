@@ -1,3 +1,4 @@
+import 'package:cheyyan/controllers/ability_controller.dart';
 import 'package:cheyyan/controllers/task_controller.dart';
 import 'package:cheyyan/models/task.dart';
 import 'package:cheyyan/services/notification_service.dart';
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     notifyHelper = NotifyHelper();
     NotifyHelper().InitializeNotifiaction();
     NotifyHelper().requestIOSPermissions();

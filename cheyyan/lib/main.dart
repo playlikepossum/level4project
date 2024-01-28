@@ -1,3 +1,4 @@
+import 'package:cheyyan/db/db_helper%20copy.dart';
 import 'package:cheyyan/db/db_helper.dart';
 import 'package:cheyyan/services/theme_services.dart';
 import 'package:cheyyan/ui/calander.dart';
@@ -9,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initDB();
+  await DBHelper2.initDB();
   await GetStorage.init();
   runApp(const MyApp());
 }

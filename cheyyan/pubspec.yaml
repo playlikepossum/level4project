@@ -45,6 +45,11 @@ dependencies:
   flutter_timezone:
   flutter_staggered_animations:
   flutter_native_splash: ^2.2.7
+  permission_handler:
+  health: ^8.1.0
+  flutterfire_cli:
+  firebase_core:
+  google_sign_in:
 
 
 dev_dependencies:
