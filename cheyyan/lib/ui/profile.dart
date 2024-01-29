@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cheyyan/controllers/ability_controller.dart';
 import 'package:cheyyan/ui/calander.dart';
 import 'package:cheyyan/ui/theme.dart';
@@ -136,6 +134,8 @@ class _ProfileState extends State<Profile> {
     _abilityController.getAbilities();
     final now = DateTime.now();
     final yesterday = now.subtract(const Duration(hours: 24));
+
+    // final yesterday = DateTime(now.year, now.month, now.day);
     _healthDataList.clear();
 
     try {
@@ -404,7 +404,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    print(_abilityController.abilityList);
     return Scaffold(
       drawer: Drawer(
         child: ListView(

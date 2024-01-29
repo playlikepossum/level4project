@@ -5,6 +5,7 @@ import 'package:cheyyan/services/notification_service.dart';
 import 'package:cheyyan/services/theme_services.dart';
 import 'package:cheyyan/ui/add_task_bar.dart';
 import 'package:cheyyan/ui/profile.dart';
+import 'package:cheyyan/ui/quests.dart';
 import 'package:cheyyan/ui/theme.dart';
 import 'package:cheyyan/ui/widgets/button.dart';
 import 'package:cheyyan/ui/widgets/task_tile.dart';
@@ -58,9 +59,8 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               title: const Text('Quests'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
+              onTap: () async {
+                await Get.to(() => const Quests());
               },
             ),
             ListTile(

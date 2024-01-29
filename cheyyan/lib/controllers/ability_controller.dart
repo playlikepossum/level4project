@@ -19,6 +19,11 @@ class AbilityController extends GetxController {
     await DBHelper2.updateAbilities(ability, Score);
     getAbilities();
   }
+
+  void incrementAbilityName(String ability) async {
+    await DBHelper2.incrementAbilities(ability);
+    getAbilities();
+  }
 }
 
   // Add more methods as needed for updating abilities

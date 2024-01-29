@@ -56,9 +56,19 @@ class DBHelper2 {
 
   static updateAbilities(String ability, int score) async {
     return await _db!.rawUpdate('''
-      UPDATE $_abilitiesTableName
-      SET ? = ?
-      
-''', [ability, score]);
+    UPDATE $_abilitiesTableName
+    SET $ability = ?
+    WHERE id = 1
+  ''', [score]);
+  }
+
+  static incrementAbilities(String ability) async {
+    return await _db!.rawUpdate(
+      '''
+    UPDATE $_abilitiesTableName
+    SET $ability = $ability + 1
+    WHERE id = 1
+  ''',
+    );
   }
 }
