@@ -3,12 +3,20 @@ class Abilities {
   int intelligence;
   int charisma;
   int constitution;
+  double strprogress;
+  double intprogress;
+  double chrprogress;
+  double conprogress;
 
   Abilities({
     required this.strength,
     required this.intelligence,
     required this.charisma,
     required this.constitution,
+    required this.strprogress,
+    required this.intprogress,
+    required this.chrprogress,
+    required this.conprogress,
   });
 
   factory Abilities.fromJson(Map<String, dynamic> json) {
@@ -17,6 +25,10 @@ class Abilities {
       intelligence: json['intelligence'] ?? 10,
       charisma: json['charisma'] ?? 10,
       constitution: json['constitution'] ?? 10,
+      strprogress: json['strprogress'] ?? 0.0,
+      intprogress: json['intprogress'] ?? 0.0,
+      chrprogress: json['chrprogress'] ?? 0.0,
+      conprogress: json['conprogress'] ?? 0.0,
     );
   }
 
@@ -26,6 +38,10 @@ class Abilities {
       'intelligence': intelligence,
       'charisma': charisma,
       'constitution': constitution,
+      'strprogress': strprogress,
+      'intprogress': intprogress,
+      'chrprogress': chrprogress,
+      'conprogress': conprogress,
     };
   }
 }

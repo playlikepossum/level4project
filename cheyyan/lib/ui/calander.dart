@@ -51,25 +51,18 @@ class _HomePageState extends State<HomePage> {
               child: Text(''),
             ),
             ListTile(
-              title: const Text('Calendar'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
-            ListTile(
               title: const Text('Quests'),
               onTap: () async {
                 await Get.to(() => const Quests());
               },
             ),
-            ListTile(
-              title: const Text('Adventure'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
+            // ListTile(
+            //   title: const Text('Adventure'),
+            //   onTap: () {
+            //     // Update the state of the app.
+            //     // ...
+            //   },
+            // ),
             ListTile(
               title: const Text('Profile'),
               onTap: () async {

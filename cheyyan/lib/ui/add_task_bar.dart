@@ -18,6 +18,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TaskController _taskController = Get.put(TaskController());
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  String? _selectedType = "Select Type";
   DateTime _selectedDate = DateTime.now();
   String _endTime = "9:30 PM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -184,8 +185,42 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       repeatList.map<DropdownMenuItem<String>>((String? value) {
                     return DropdownMenuItem<String>(
                         value: value,
-                        child:
-                            Text(value!, style: const TextStyle(color: Colors.grey)));
+                        child: Text(value!,
+                            style: const TextStyle(color: Colors.grey)));
+                  }).toList(),
+                ),
+              ),
+              MyInputField(
+                title: "Type",
+                hint: _selectedType!,
+                widget: DropdownButton(
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.grey,
+                  ),
+                  iconSize: 32,
+                  elevation: 4,
+                  underline: Container(
+                    height: 0,
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedType = newValue!;
+                    });
+                  },
+                  style: subHeadingStyle,
+                  items: [
+                    "Select Type",
+                    "Active",
+                    "Academic",
+                    "Social",
+                    "Mindful"
+                  ].map<DropdownMenuItem<String>>((String? value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value!,
+                          style: const TextStyle(color: Colors.grey)),
+                    );
                   }).toList(),
                 ),
               ),
@@ -234,6 +269,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       repeat: _selectedRepeat,
       color: _selectedColor,
       isCompleted: 0,
+      type: _selectedType,
     ));
   }
 

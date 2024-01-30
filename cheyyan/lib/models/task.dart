@@ -9,6 +9,11 @@ class Task {
   int? color;
   int? remind;
   String? repeat;
+  String? type;
+  int? strprogress;
+  int? intprogress;
+  int? chrprogress;
+  int? conprogress;
 
   Task({
     this.id,
@@ -21,6 +26,11 @@ class Task {
     this.color,
     this.remind,
     this.repeat,
+    this.type,
+    this.strprogress,
+    this.intprogress,
+    this.chrprogress,
+    this.conprogress,
   });
 
   Task.fromJson(Map<String, dynamic> json) {
@@ -34,6 +44,11 @@ class Task {
     color = json['color'];
     remind = json['remind'];
     repeat = json['repeat'];
+    type = json['type'];
+    strprogress = json['strprogress'];
+    intprogress = json['intprogress'];
+    chrprogress = json['chrprogress'];
+    conprogress = json['conprogress'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +63,7 @@ class Task {
     data['color'] = color;
     data['remind'] = remind;
     data['repeat'] = repeat;
+    data['type'] = type;
     return data;
   }
 }

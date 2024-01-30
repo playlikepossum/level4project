@@ -117,6 +117,11 @@ class _ProfileState extends State<Profile> {
       } catch (error) {
         print("Exception in authorize: $error");
       }
+      // try {
+      //   authorized = await health.requestAuthorization(types);
+      // } catch (error) {
+      //   print("Exception in authorize: $error");
+      // }
     }
 
     setState(() {

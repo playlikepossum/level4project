@@ -14,6 +14,7 @@ class DBHelper {
     }
     try {
       String path = '${await getDatabasesPath()}tasks.db';
+      // deleteDatabase(path);
       _db = await openDatabase(
         path,
         version: _version,
@@ -28,19 +29,9 @@ class DBHelper {
             "startTime STRING, endTime STRING, "
             "remind INTEGER, repeat STRING, "
             "color INTEGER, "
-            "isCompleted INTEGER)",
+            "isCompleted INTEGER,"
+            "type STRING)",
           );
-
-          // Create abilities table
-          await db.execute('''
-      CREATE TABLE $_abilitiesTableName (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        strength INTEGER,
-        intelligence INTEGER,
-        charisma INTEGER,
-        constitution INTEGER
-      )
-    ''');
         },
       );
     } catch (e) {
@@ -80,6 +71,24 @@ class DBHelper {
       SET isCompleted = ?
       WHERE id = ?
 ''', [1, id]);
+  }
+
+  static Future<String?> getTaskType(int id) async {
+    List<Map<String, dynamic>> result = await _db!.query(
+      _tasksTableName,
+      columns: ['type'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    return result.isNotEmpty ? result.first['type'] : null;
+  }
+
+  static updateTaskType(int id, String type) async {
+    return await _db!.rawUpdate('''
+      UPDATE $_tasksTableName
+      SET type = ?
+      WHERE id = ?
+''', [type, id]);
   }
 
   static updateAbilities(String ability, int score) async {

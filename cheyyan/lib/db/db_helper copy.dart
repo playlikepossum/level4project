@@ -13,6 +13,7 @@ class DBHelper2 {
     }
     try {
       String path = '${await getDatabasesPath()}abilities.db';
+      // deleteDatabase(path);
       _db = await openDatabase(
         path,
         version: _version,
@@ -25,16 +26,20 @@ class DBHelper2 {
           await db.execute('''
       CREATE TABLE $_abilitiesTableName (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        strength INTEGER DEFAULT 10 NOT NULL,
-        intelligence INTEGER DEFAULT 10 NOT NULL,
-        charisma INTEGER DEFAULT 10 NOT NULL,
-        constitution INTEGER DEFAULT 10 NOT NULL
+        strength INTEGER DEFAULT 5 NOT NULL,
+        intelligence INTEGER DEFAULT 5 NOT NULL,
+        charisma INTEGER DEFAULT 5 NOT NULL,
+        constitution INTEGER DEFAULT 5 NOT NULL,
+        strprogress REAL DEFAULT 0.0 NOT NULL,
+        intprogress REAL DEFAULT 0.0 NOT NULL,
+        chrprogress REAL DEFAULT 0.0 NOT NULL,
+        conprogress REAL DEFAULT 0.0 NOT NULL
       )
     ''');
           await db.execute('''
       INSERT INTO $_abilitiesTableName 
-      (strength, intelligence, charisma, constitution)
-      VALUES (10, 10, 10, 10)
+      (strength, intelligence, charisma, constitution,strprogress,intprogress, chrprogress, conprogress )
+      VALUES (5, 5, 5, 5, 0.0,0.0,0.0,0.0)
     ''');
         },
       );
@@ -62,13 +67,136 @@ class DBHelper2 {
   ''', [score]);
   }
 
-  static incrementAbilities(String ability) async {
-    return await _db!.rawUpdate(
-      '''
+  static Future<double?> getProgress(String ability) async {
+    if (ability == 'strength') {
+      List<Map<String, dynamic>> result = await _db!.query(
+        _abilitiesTableName,
+        columns: ['strprogress'],
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+      return result.isNotEmpty ? result.first['strprogress'] as double : null;
+    }
+    if (ability == 'intelligence') {
+      List<Map<String, dynamic>> result = await _db!.query(
+        _abilitiesTableName,
+        columns: ['intprogress'],
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+      return result.isNotEmpty ? result.first['intprogress'] as double : null;
+    }
+    if (ability == 'charisma') {
+      List<Map<String, dynamic>> result = await _db!.query(
+        _abilitiesTableName,
+        columns: ['chrprogress'],
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+      return result.isNotEmpty ? result.first['chrprogress'] as double : null;
+    }
+    if (ability == 'constitution') {
+      List<Map<String, dynamic>> result = await _db!.query(
+        _abilitiesTableName,
+        columns: ['conprogress'],
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+      return result.isNotEmpty ? result.first['conprogress'] as double : null;
+    }
+  }
+
+  static incrProgress(String ability) async {
+    if (ability == 'strength') {
+      return await _db!.rawUpdate(
+        '''
     UPDATE $_abilitiesTableName
-    SET $ability = $ability + 1
+    SET strprogress = strprogress + 0.1
     WHERE id = 1
   ''',
-    );
+      );
+    }
+    if (ability == 'intelligence') {
+      return await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET intprogress = intprogress + 0.2
+    WHERE id = 1
+  ''',
+      );
+    }
+    if (ability == 'charisma') {
+      return await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET chrprogress = chrprogress + 0.2
+    WHERE id = 1
+  ''',
+      );
+    }
+    if (ability == 'constitution') {
+      return await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET conprogress = conprogress + 0.1
+    WHERE id = 1
+  ''',
+      );
+    }
+  }
+
+  static incrementAbilities(String ability) async {
+    incrProgress(ability);
+    double? progress = await DBHelper2.getProgress(ability);
+    if (progress != null && progress >= 1) {
+      print('hello');
+      resetProgress(ability);
+      return await _db!.rawUpdate(
+        '''
+      UPDATE $_abilitiesTableName
+      SET $ability = $ability + 1
+      WHERE id = 1
+    ''',
+      );
+    }
+  }
+
+  static resetProgress(String ability) async {
+    if (ability == 'strength') {
+      return await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET strprogress = 0
+    WHERE id = 1
+  ''',
+      );
+    }
+    if (ability == 'intelligence') {
+      return await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET intprogress = 0
+    WHERE id = 1
+  ''',
+      );
+    }
+    if (ability == 'charisma') {
+      return await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET chrprogress = 0
+    WHERE id = 1
+  ''',
+      );
+    }
+    if (ability == 'constitution') {
+      return await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET conprogress = 0
+    WHERE id = 1
+  ''',
+      );
+    }
   }
 }
