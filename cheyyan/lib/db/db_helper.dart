@@ -46,7 +46,10 @@ class DBHelper {
 
   static Future<List<Map<String, dynamic>>> queryTasks() async {
     print("query tasks function called");
-    return await _db!.query(_tasksTableName);
+    return await _db!.query(
+      _tasksTableName,
+      orderBy: 'date ASC, startTime ASC',
+    );
   }
 
   static Future<int> insertAbilities(Abilities? abilities) async {

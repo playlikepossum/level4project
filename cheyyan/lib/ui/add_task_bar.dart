@@ -20,7 +20,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _noteController = TextEditingController();
   String? _selectedType = "Select Type";
   DateTime _selectedDate = DateTime.now();
-  String _endTime = "9:30 PM";
+  String _endTime = DateFormat("hh:mm a")
+      .format(DateTime.now().add(const Duration(hours: 1)))
+      .toString();
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   List<int> remindList = [
@@ -331,21 +333,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _getTimeFromUser({required bool isStartTime}) async {
     var pickedTime = await _showTimePicker();
-    String formatedTime = pickedTime.format(context);
     if (pickedTime == null) {
       print("Time Cancelled");
     } else if (isStartTime == true) {
       setState(() {
+        String formatedTime = pickedTime.format(context);
         _startTime = formatedTime;
+        // print(_startTime);
       });
     } else if (isStartTime == false) {
       setState(() {
+        String formatedTime = pickedTime.format(context);
         _endTime = formatedTime;
       });
     }
   }
 
   _showTimePicker() {
+    print(_startTime);
     return showTimePicker(
       initialEntryMode: TimePickerEntryMode.input,
       context: context,
