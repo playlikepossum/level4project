@@ -50,6 +50,18 @@ dependencies:
   flutterfire_cli:
   firebase_core:
   google_sign_in:
+  http: ^0.13.3
+  path_provider: ^2.0.2
+  open_file: ^3.2.1
+  flutter_bloc:
+  equatable: ^2.0.5
+  easy_localization: ^3.0.3
+  file_utils: ^1.0.1
+  dio: ^5.4.0
+  url_launcher: ^6.2.4
+  flutter_pdfview:
+  flutter_media_downloader: ^1.0.4
+
 
 
 dev_dependencies:
