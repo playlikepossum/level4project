@@ -7,6 +7,7 @@ import 'package:cheyyan/ui/profile.dart';
 import 'package:cheyyan/ui/quests.dart';
 import 'package:cheyyan/ui/theme.dart';
 import 'package:cheyyan/ui/widgets/button.dart';
+import 'package:cheyyan/ui/widgets/shopz.dart';
 import 'package:cheyyan/ui/widgets/task_tile.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
@@ -55,13 +56,12 @@ class _HomePageState extends State<HomePage> {
                 await Get.to(() => const Quests());
               },
             ),
-            // ListTile(
-            //   title: const Text('Adventure'),
-            //   onTap: () {
-            //     // Update the state of the app.
-            //     // ...
-            //   },
-            // ),
+            ListTile(
+              title: const Text('Adventure'),
+              onTap: () async {
+                await Get.to(() => DownloadPage());
+              },
+            ),
             ListTile(
               title: const Text('Profile'),
               onTap: () async {
