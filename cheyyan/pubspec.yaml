@@ -61,6 +61,9 @@ dependencies:
   url_launcher: ^6.2.4
   flutter_pdfview:
   flutter_media_downloader: ^1.0.4
+  wifi_ip_details :
+  image_picker: ^0.8.4+4
+  
 
 
 

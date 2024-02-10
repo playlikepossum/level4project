@@ -7,6 +7,7 @@ class Abilities {
   double intprogress;
   double chrprogress;
   double conprogress;
+  double exp;
 
   Abilities({
     required this.strength,
@@ -17,6 +18,7 @@ class Abilities {
     required this.intprogress,
     required this.chrprogress,
     required this.conprogress,
+    required this.exp,
   });
 
   factory Abilities.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class Abilities {
       intprogress: json['intprogress'] ?? 0.0,
       chrprogress: json['chrprogress'] ?? 0.0,
       conprogress: json['conprogress'] ?? 0.0,
+      exp: json['exp'] ?? 0.0,
     );
   }
 
@@ -42,6 +45,7 @@ class Abilities {
       'intprogress': intprogress,
       'chrprogress': chrprogress,
       'conprogress': conprogress,
+      'exp': exp,
     };
   }
 }

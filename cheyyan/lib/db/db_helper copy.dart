@@ -33,13 +33,14 @@ class DBHelper2 {
         strprogress REAL DEFAULT 0.0 NOT NULL,
         intprogress REAL DEFAULT 0.0 NOT NULL,
         chrprogress REAL DEFAULT 0.0 NOT NULL,
-        conprogress REAL DEFAULT 0.0 NOT NULL
+        conprogress REAL DEFAULT 0.0 NOT NULL,
+        exp REAL DEFAULT 1.0 NOT NULL
       )
     ''');
           await db.execute('''
       INSERT INTO $_abilitiesTableName 
-      (strength, intelligence, charisma, constitution,strprogress,intprogress, chrprogress, conprogress )
-      VALUES (5, 5, 5, 5, 0.0,0.0,0.0,0.0)
+      (strength, intelligence, charisma, constitution,strprogress,intprogress, chrprogress, conprogress, exp)
+      VALUES (5, 5, 5, 5, 0.0,0.0,0.0,0.0,1.0)
     ''');
         },
       );
@@ -104,10 +105,28 @@ class DBHelper2 {
       );
       return result.isNotEmpty ? result.first['conprogress'] as double : null;
     }
+
+    if (ability == 'exp') {
+      List<Map<String, dynamic>> result = await _db!.query(
+        _abilitiesTableName,
+        columns: ['conprogress'],
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+      return result.isNotEmpty ? result.first['conprogress'] as double : null;
+    }
+    return null;
   }
 
   static incrProgress(String ability) async {
     if (ability == 'strength') {
+      await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET exp = exp + 0.1
+    WHERE id = 1
+  ''',
+      );
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -117,6 +136,13 @@ class DBHelper2 {
       );
     }
     if (ability == 'intelligence') {
+      await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET exp = exp + 0.2
+    WHERE id = 1
+  ''',
+      );
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -126,6 +152,13 @@ class DBHelper2 {
       );
     }
     if (ability == 'charisma') {
+      await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET exp = exp + 0.2
+    WHERE id = 1
+  ''',
+      );
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -135,6 +168,13 @@ class DBHelper2 {
       );
     }
     if (ability == 'constitution') {
+      await _db!.rawUpdate(
+        '''
+    UPDATE $_abilitiesTableName
+    SET exp = exp + 0.1
+    WHERE id = 1
+  ''',
+      );
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName

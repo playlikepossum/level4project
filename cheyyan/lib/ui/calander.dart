@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    _taskController.getTasks();
     notifyHelper = NotifyHelper();
     NotifyHelper().InitializeNotifiaction();
     NotifyHelper().requestIOSPermissions();
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              title: const Text('Adventure'),
+              title: const Text('Shop'),
               onTap: () async {
                 await Get.to(() => DownloadPage());
               },
@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> {
   _showTasks() {
     return Expanded(
       child: Obx(() {
+        //
         return ListView.builder(
             itemCount: _taskController.taskList.length,
             itemBuilder: (_, index) {
@@ -109,6 +110,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           GestureDetector(
                               onTap: () {
+                                _taskController.getTasks();
                                 _showBottomSheet(context, task);
                               },
                               child: TaskTile(task))
@@ -119,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }
               if (task.date == DateFormat.yMd().format(_selectedDate)) {
+                _taskController.getTasks();
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   child: SlideAnimation(
@@ -127,6 +130,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           GestureDetector(
                               onTap: () {
+                                _taskController.getTasks();
                                 _showBottomSheet(context, task);
                               },
                               child: TaskTile(task))
@@ -238,6 +242,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           GestureDetector(
             onTap: () {
+              _taskController.getTasks();
               ThemeService().SwitchTheme();
               // NotifyHelper().displayNotification(
               // title: "Theme Changed",
@@ -265,6 +270,7 @@ class _HomePageState extends State<HomePage> {
         DateTime.now(),
         height: 100,
         width: 80,
+        inactiveDates: [],
         initialSelectedDate: DateTime.now(),
         selectionColor: primaryClr,
         selectedTextColor: white,

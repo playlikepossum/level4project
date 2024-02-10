@@ -1,8 +1,14 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:cheyyan/ui/profile.dart';
+import 'package:cheyyan/ui/quests.dart';
+import 'package:cheyyan/ui/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:wifi_ip_details/wifi_ip_details.dart';
 import 'package:url_launcher/url_launcher.dart';
+// import 'package:wifi_ip_details/wifi_ip_details.dart';
 
 class DownloadPage extends StatefulWidget {
   @override
@@ -59,28 +65,65 @@ class _DownloadPageState extends State<DownloadPage> {
 
     // Generate three random books
     for (int i = 0; i < 3; i++) {
-      randomBooks.add(generateRandomBook(books));
+      Map<String, dynamic> book = generateRandomBook(books);
+      while (randomBooks.contains(book)) {
+        book = generateRandomBook(books);
+      }
+      randomBooks.add(book);
     }
   }
 
-  Future<void> _startDownload(String title) async {
-    final response = await http
-        .get(Uri.parse('http://192.168.1.98:5000/search?title_name=$title'));
+  Future<void> _startDownload(String title, String author) async {
+    String? target = '192.168.1.98:5000';
+    final response = await http.get(Uri.parse(
+        'http://$target/search?title_name=$title&author_name=$author'));
 
     if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON
       Map<String, dynamic> jsonMap = jsonDecode(response.body);
 
-      Map<String, dynamic> downloadLinks = jsonMap['download_links'];
+      List<dynamic> results = jsonMap['results'];
 
-      String url = downloadLinks['GET'];
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Select a book to download'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: results.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text(results[index]['Title']),
+                    onTap: () async {
+                      final response2 = await http.get(Uri.parse(
+                          'http://$target/search?title_name=$title&author_name=$author&link=$index'));
+                      Map<String, dynamic> jsonMap2 =
+                          jsonDecode(response2.body);
 
-      final Uri data = Uri.parse(url);
-      if (!await launchUrl(data)) {
-        throw Exception('Could not launch the pdf');
-      }
-      // _flutterMediaDownloaderPlugin.downloadMedia(context, url);
+                      Map<String, dynamic> results2 =
+                          jsonMap2['download_links'];
+
+                      // Download the selected book
+                      String downloadLink = results2["GET"];
+                      final Uri data = Uri.parse(downloadLink);
+                      if (!await launchUrl(data)) {
+                        throw Exception('Could not launch the pdf');
+                      }
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
     }
+
+    // If the server returns a 200 OK response, parse the JSON
   }
 
   Map<String, dynamic> generateRandomBook(List<Map<String, dynamic>> books) {
@@ -98,7 +141,19 @@ class _DownloadPageState extends State<DownloadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Download Page'),
+        title: Text('Shop'),
+        elevation: 0,
+        backgroundColor: context.theme.colorScheme.background,
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Get.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(20.0),
@@ -108,11 +163,12 @@ class _DownloadPageState extends State<DownloadPage> {
             // Display three random book titles
             for (var book in randomBooks)
               ElevatedButton(
-                onPressed: () => _startDownload(book['title']),
+                onPressed: () => _startDownload(book['title'], book['author']),
                 child: Text(book['title']),
               ),
             SizedBox(height: 20.0), // Add some spacing between the buttons
             // Button to generate new random books
+
             ElevatedButton(
               onPressed: () {
                 setState(() {

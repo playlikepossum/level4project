@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:cheyyan/controllers/ability_controller.dart';
 import 'package:cheyyan/ui/calander.dart';
+import 'package:cheyyan/ui/quests.dart';
 import 'package:cheyyan/ui/theme.dart';
+import 'package:cheyyan/ui/widgets/shopz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 import 'package:health/health.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
@@ -31,6 +36,7 @@ enum AppState {
 
 class _ProfileState extends State<Profile> {
   final AbilityController _abilityController = Get.put(AbilityController());
+
   List<HealthDataPoint> _healthDataList = [];
   AppState _state = AppState.DATA_NOT_FETCHED;
   int _nofSteps = 0;
@@ -76,15 +82,15 @@ class _ProfileState extends State<Profile> {
   //   // The location permission is requested for Workouts using the Distance information.
   //   await Permission.activityRecognition.request();
   //   await Permission.location.request();
-
+//
   //   // Check if we have permission
   //   bool? hasPermissions =
   //       await health.hasPermissions(types, permissions: permissions);
-
+//
   //   // hasPermissions = false because the hasPermission cannot disclose if WRITE access exists.
   //   // Hence, we have to request with WRITE as well.
   //   hasPermissions = false;
-
+//
   //   bool authorized = false;
   //   if (!hasPermissions) {
   //     // requesting access to the data types before reading them
@@ -95,7 +101,7 @@ class _ProfileState extends State<Profile> {
   //       print("Exception in authorize: $error");
   //     }
   //   }
-
+//
   //   setState(() => _state =
   //       (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED);
   // }
@@ -232,20 +238,20 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  /// Delete some random health data.
-  Future deleteData() async {
-    final now = DateTime.now();
-    final earlier = now.subtract(const Duration(hours: 24));
+  // /// Delete some random health data.
+  // Future deleteData() async {
+  //   final now = DateTime.now();
+  //   final earlier = now.subtract(const Duration(hours: 24));
 
-    bool success = true;
-    for (HealthDataType type in types) {
-      success &= await health.delete(type, earlier, now);
-    }
+  //   bool success = true;
+  //   for (HealthDataType type in types) {
+  //     success &= await health.delete(type, earlier, now);
+  //   }
 
-    setState(() {
-      _state = success ? AppState.DATA_DELETED : AppState.DATA_NOT_DELETED;
-    });
-  }
+  //   setState(() {
+  //     _state = success ? AppState.DATA_DELETED : AppState.DATA_NOT_DELETED;
+  //   });
+  // }
 
   /// Fetch steps from the health plugin and show them in the app.
   Future fetchStepData() async {
@@ -409,6 +415,22 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    String currentLevel = '';
+    double level = 0.0;
+    double maxLevel = 0;
+    File? _profileImage = File("images/profile.jpg");
+
+    // print(_abilityController.abilityList);
+    for (var x in _abilityController.abilityList) {
+      level = x.exp.toDouble() - x.exp.floor().toDouble();
+      maxLevel = x.exp.ceil().toDouble() - x.exp.floor().toDouble();
+      currentLevel = x.exp.floor().toInt().toString();
+    }
+
+    if (maxLevel == 0) {
+      maxLevel = 1;
+    }
+
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -417,28 +439,20 @@ class _ProfileState extends State<Profile> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
+                color: pinkClr,
               ),
               child: Text(''),
             ),
             ListTile(
-              title: const Text('Calendar'),
-              onTap: () async {
-                await Get.to(() => const HomePage());
-              },
-            ),
-            ListTile(
               title: const Text('Quests'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
+              onTap: () async {
+                await Get.to(() => const Quests());
               },
             ),
             ListTile(
-              title: const Text('Adventure'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
+              title: const Text('Shop'),
+              onTap: () async {
+                await Get.to(() => DownloadPage());
               },
             ),
             ListTile(
@@ -483,7 +497,7 @@ class _ProfileState extends State<Profile> {
                 stops: [0.5, 0.9],
               ),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -560,16 +574,26 @@ class _ProfileState extends State<Profile> {
                     children: _abilityController.abilityList
                         .map(
                           (ability) => ListTile(
-                            title: Text('Strength: ${ability.strength}'),
-                            subtitle:
-                                Text('Intelligence: ${ability.intelligence}\n'
-                                    'Charisma: ${ability.charisma}\n'
-                                    'Constitution: ${ability.constitution}'),
+                            title: Text('Strength: ${ability.strength} \n'
+                                'Intelligence: ${ability.intelligence}\n'
+                                'Charisma: ${ability.charisma}\n'
+                                'Constitution: ${ability.constitution}'),
+
                             // Add more details or actions as needed
                           ),
                         )
                         .toList(),
                   ),
+                ),
+                Text(
+                  ('Level: ${currentLevel}'),
+                  style: TextStyle(fontSize: 24),
+                ),
+                SizedBox(height: 10),
+                LinearProgressIndicator(
+                  value: level / maxLevel,
+                  backgroundColor: Colors.grey,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                 ),
               ],
             ),
