@@ -20,10 +20,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _noteController = TextEditingController();
   String? _selectedType = "Select Type";
   DateTime _selectedDate = DateTime.now();
-  String _endTime = DateFormat("hh:mm a")
+  String _endTime = DateFormat("HH:mm")
       .format(DateTime.now().add(const Duration(hours: 1)))
       .toString();
-  String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
+  String _startTime = DateFormat("HH:mm").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   List<int> remindList = [
     5,
@@ -31,6 +31,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
     15,
     20,
   ];
+
+  Map<String, int> typeColors = {
+    "Active": 0,
+    "Academic": 1,
+    "Social": 2,
+    "Mindful": 3, // Add more colors as needed
+  };
 
   String _selectedRepeat = "None";
   List<String> repeatList = [
@@ -91,7 +98,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               MyInputField(
                 title: "Date",
-                hint: DateFormat.yMd().format(_selectedDate),
+                hint: DateFormat('dd/MM/yyyy').format(_selectedDate),
                 widget: IconButton(
                   icon: const Icon(
                     Icons.calendar_today_outlined,
@@ -106,7 +113,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 children: [
                   Expanded(
                     child: MyInputField(
-                      title: "Start Date",
+                      title: "Start Time",
                       hint: _startTime,
                       widget: IconButton(
                         icon: const Icon(
@@ -124,7 +131,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                   Expanded(
                     child: MyInputField(
-                      title: "End Date",
+                      title: "End Time",
                       hint: _endTime,
                       widget: IconButton(
                         icon: const Icon(
@@ -208,16 +215,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedType = newValue!;
+                      _selectedColor = typeColors[_selectedType]
+                          as int; // Update the selected color based on the selected type
                     });
                   },
                   style: subHeadingStyle,
-                  items: [
-                    "Select Type",
-                    "Active",
-                    "Academic",
-                    "Social",
-                    "Mindful"
-                  ].map<DropdownMenuItem<String>>((String? value) {
+                  items: ["Active", "Academic", "Social", "Mindful"]
+                      .map<DropdownMenuItem<String>>((String? value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value!,
@@ -231,7 +235,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               Row(
                 children: [
-                  _colorPallete(),
                   MyButton(label: "Create Task", onTap: () => _validateDate())
                 ],
               )
@@ -273,6 +276,61 @@ class _AddTaskPageState extends State<AddTaskPage> {
       isCompleted: 0,
       type: _selectedType,
     ));
+
+    if (_selectedRepeat == "Daily") {
+      for (int i = 1; i <= 72; i++) {
+        await _taskController.addTask(
+            task: Task(
+          note: _noteController.text,
+          title: _titleController.text,
+          date: DateFormat.yMd().format(_selectedDate.add(Duration(days: i))),
+          startTime: _startTime,
+          endTime: _endTime,
+          remind: _selectedRemind,
+          repeat: _selectedRepeat,
+          color: _selectedColor,
+          isCompleted: 0,
+          type: _selectedType,
+        ));
+      }
+    }
+
+    if (_selectedRepeat == "Weekly") {
+      for (int i = 1; i <= 12; i++) {
+        await _taskController.addTask(
+            task: Task(
+          note: _noteController.text,
+          title: _titleController.text,
+          date:
+              DateFormat.yMd().format(_selectedDate.add(Duration(days: 7 * i))),
+          startTime: _startTime,
+          endTime: _endTime,
+          remind: _selectedRemind,
+          repeat: _selectedRepeat,
+          color: _selectedColor,
+          isCompleted: 0,
+          type: _selectedType,
+        ));
+      }
+    }
+    if (_selectedRepeat == "Monthly") {
+      for (int i = 1; i <= 3; i++) {
+        await _taskController.addTask(
+            task: Task(
+          note: _noteController.text,
+          title: _titleController.text,
+          date: DateFormat.yMd().format(DateTime(
+              _selectedDate.year, _selectedDate.month + i, _selectedDate.day)),
+          startTime: _startTime,
+          endTime: _endTime,
+          remind: _selectedRemind,
+          repeat: _selectedRepeat,
+          color: _selectedColor,
+          isCompleted: 0,
+          type: _selectedType,
+        ));
+      }
+    }
   }
 
   _colorPallete() {
@@ -302,7 +360,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       ? primaryClr
                       : index == 1
                           ? pinkClr
-                          : yellowClr,
+                          : index == 2
+                              ? yellowClr
+                              : greenClr,
                   child: _selectedColor == index
                       ? const Icon(Icons.done, color: Colors.white, size: 16)
                       : Container(),
@@ -325,6 +385,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (pickerDate != null) {
       setState(() {
         _selectedDate = pickerDate;
+        print(_selectedDate);
       });
     } else {
       print("something went wrong (it might be null)");
@@ -337,26 +398,41 @@ class _AddTaskPageState extends State<AddTaskPage> {
       print("Time Cancelled");
     } else if (isStartTime == true) {
       setState(() {
-        String formatedTime = pickedTime.format(context);
+        String formatedTime =
+            '${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}';
         _startTime = formatedTime;
-        // print(_startTime);
       });
     } else if (isStartTime == false) {
       setState(() {
-        String formatedTime = pickedTime.format(context);
+        String formatedTime =
+            '${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}';
         _endTime = formatedTime;
       });
     }
   }
 
-  _showTimePicker() {
-    print(_startTime);
-    return showTimePicker(
-      initialEntryMode: TimePickerEntryMode.input,
+  _showTimePicker() async {
+    final newTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay(
-          hour: int.parse(_startTime.split(":")[0]),
-          minute: int.parse(_startTime.split(":")[1].split(" ")[0])),
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child ?? Container(),
+        );
+      },
     );
+
+    print(newTime);
+
+    return newTime;
+    //   return showTimePicker(
+    //     initialEntryMode: TimePickerEntryMode.dial,
+    //     context: context,
+    //     initialTime: TimeOfDay(
+    //         hour: int.parse(_startTime.split(":")[0]),
+    //         minute: int.parse(_startTime.split(":")[1].split(" ")[0])),
+    //   );
+    // }
   }
 }

@@ -66,7 +66,7 @@ class NotifyHelper {
       task.id!.toInt(),
       task.title,
       task.note,
-      _convertTime(hour, minutes),
+      _convertTime(task, hour, minutes),
       // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
       const NotificationDetails(
           android: AndroidNotificationDetails(
@@ -79,14 +79,92 @@ class NotifyHelper {
     );
   }
 
-  tz.TZDateTime _convertTime(int hour, int minutes) {
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduleDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
+  scheduledWeeklyNotification(int hour, int minutes, Task task) async {
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      task.id!.toInt(),
+      task.title,
+      task.note,
+      _timeConWeekMonth(task.date, hour, minutes, true, false),
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+              'your channel id', 'your channel name')),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      payload: "${task.title}|" "${task.note}|",
+    );
+  }
 
-    if (scheduleDate.isBefore(now)) {
-      scheduleDate = scheduleDate.add(const Duration(days: 1));
+  scheduledMonthlyNotification(int hour, int minutes, Task task) async {
+    for (int i = 1; i <= 12; i++) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        task.id!.toInt() + i,
+        task.title,
+        task.note,
+        _timeConWeekMonth(task.date, hour, minutes, false, true),
+        // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                'your channel id', 'your channel name')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: "${task.title}|" "${task.note}|",
+      );
     }
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      task.id!.toInt(),
+      task.title,
+      task.note,
+      _timeConWeekMonth(task.date, hour, minutes, false, true),
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+              'your channel id', 'your channel name')),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      payload: "${task.title}|" "${task.note}|",
+    );
+  }
+
+  tz.TZDateTime _timeConWeekMonth(
+      String? date, int hour, int minutes, bool isWeekly, bool isMonthly) {
+    if (isWeekly) {
+      DateTime taskDateTime = DateTime.parse(date!);
+      tz.TZDateTime taskTZDateTime = tz.TZDateTime.from(taskDateTime, tz.local);
+      tz.TZDateTime scheduleDate = tz.TZDateTime(tz.local, taskTZDateTime.year,
+          taskTZDateTime.month, taskTZDateTime.day, hour, minutes);
+      return scheduleDate;
+    } else if (isMonthly) {
+      DateTime taskDateTime = DateTime.parse(date!);
+      tz.TZDateTime taskTZDateTime = tz.TZDateTime.from(taskDateTime, tz.local);
+      tz.TZDateTime scheduleDate = tz.TZDateTime(tz.local, taskTZDateTime.year,
+          taskTZDateTime.month, taskTZDateTime.day, hour, minutes);
+      return scheduleDate;
+    } else {
+      final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+      tz.TZDateTime scheduleDate =
+          tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
+      if (scheduleDate.isBefore(now)) {
+        scheduleDate = scheduleDate.add(const Duration(days: 1));
+      }
+      return scheduleDate;
+    }
+  }
+
+  tz.TZDateTime _convertTime(Task task, hour, int minutes) {
+    String date = task.date!;
+    print(task.remind);
+    DateTime taskDateTime = DateTime.parse(date);
+    tz.TZDateTime taskTZDateTime = tz.TZDateTime.from(taskDateTime, tz.local);
+    tz.TZDateTime scheduleDate = tz.TZDateTime(tz.local, taskTZDateTime.year,
+        taskTZDateTime.month, taskTZDateTime.day, hour, minutes);
+
     return scheduleDate;
   }
 

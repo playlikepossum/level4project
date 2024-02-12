@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:cheyyan/controllers/ability_controller.dart';
+import 'package:cheyyan/models/abilities.dart';
 import 'package:cheyyan/ui/profile.dart';
 import 'package:cheyyan/ui/quests.dart';
 import 'package:cheyyan/ui/theme.dart';
@@ -17,6 +19,14 @@ class DownloadPage extends StatefulWidget {
 
 class _DownloadPageState extends State<DownloadPage> {
   String url = '';
+  final AbilityController _abilityController = Get.find();
+  bool? claimed;
+  String? currentLevel;
+  double? progress;
+  double? maxLevel;
+  double? level;
+  double? savedLevel;
+  int barrier = 1;
   List<Map<String, dynamic>> randomBooks = [];
   List<Map<String, dynamic>> books = [
     {'title': 'Pride and Prejudice', 'author': 'Jane Austen'},
@@ -48,19 +58,27 @@ class _DownloadPageState extends State<DownloadPage> {
     {'title': 'The Count of Monte Cristo', 'author': 'Alexandre Dumas'},
     {'title': 'Treasure Island', 'author': 'Robert Louis Stevenson'},
     {'title': 'Walden', 'author': 'Henry David Thoreau'},
-    {'title': 'The Iliad', 'author': 'Homer'},
-    {'title': 'The Odyssey', 'author': 'Homer'}
+    {'title': 'The Odyssey', 'author': 'Homer'},
+
     // More books...
   ];
 
   @override
   void initState() {
     super.initState();
+    print('init state called');
+    _abilityController.getAbilities();
     generateRandomBooks();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   void generateRandomBooks() {
     // Clear the existing list
+
     randomBooks.clear();
 
     // Generate three random books
@@ -137,11 +155,112 @@ class _DownloadPageState extends State<DownloadPage> {
     return books[randomIndex];
   }
 
+  void _showRandomBooksDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Random Books'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              for (var book in randomBooks)
+                ListTile(
+                  title: Text(book['title']),
+                  subtitle: Text(book['author']),
+                  onTap: () {
+                    Navigator.pop(context); // Close the dialog
+                    _startDownload(book['title'], book['author']);
+                  },
+                ),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> updateLevelAndProgress(bool flag) async {
+    progress = 0.0;
+    maxLevel = 0.0;
+    currentLevel = '1';
+    barrier = 2;
+    level = 0.0;
+    if (savedLevel == null) {
+      savedLevel = 1.0;
+    }
+    if (flag) {
+      setState(() {
+        barrier += 1;
+        claimed = true;
+      });
+
+      print('flag barrier: $barrier');
+    } else {
+      for (var x in _abilityController.abilityList) {
+        progress = x.exp.toDouble() - x.exp.floor().toDouble();
+        maxLevel = x.exp.ceil().toDouble() - x.exp.floor().toDouble();
+        if (progress == 0.0 && maxLevel == 0.0) {
+          maxLevel = maxLevel! + 1.0;
+        }
+        currentLevel = x.exp.floor().toInt().toString();
+
+        level = x.exp.toDouble();
+        print('level: $level');
+        print('savedlevel: $savedLevel');
+        if (level! > savedLevel! && level! > barrier) {
+          setState(() {
+            claimed = false;
+            savedLevel = level;
+          });
+        } else {
+          setState(() {
+            claimed = true;
+          });
+        }
+        setState(() {
+          level = x.exp.toDouble();
+          progress = x.exp.toDouble() - x.exp.floor().toDouble();
+          maxLevel = x.exp.ceil().toDouble() - x.exp.floor().toDouble();
+          currentLevel = x.exp.floor().toInt().toString();
+          savedLevel = savedLevel;
+        });
+        print('Newsavedlevel: $savedLevel');
+        print('barrier: $barrier');
+        print('claimed2: $claimed');
+        print('progress: $progress');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // for (var x in _abilityController.abilityList) {
+    //   setState(() {
+    //     progress = x.exp.toDouble() - x.exp.floor().toDouble();
+    //     maxLevel = x.exp.ceil().toDouble() - x.exp.floor().toDouble();
+    //     if (progress == 0.0 && maxLevel == 0.0) {
+    //       maxLevel += 1.0;
+    //     }
+    //     currentLevel = x.exp.floor().toInt().toString();
+    //     level = x.exp.toDouble();
+    //   });
+    // }
+    setState(() {
+      updateLevelAndProgress(false);
+    });
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shop'),
+        title: const Text('Rewards'),
         elevation: 0,
         backgroundColor: context.theme.colorScheme.background,
         leading: GestureDetector(
@@ -160,23 +279,46 @@ class _DownloadPageState extends State<DownloadPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Display three random book titles
-            for (var book in randomBooks)
+            if (level! > barrier && progress! >= 0.0 && !claimed!)
               ElevatedButton(
-                onPressed: () => _startDownload(book['title'], book['author']),
-                child: Text(book['title']),
-              ),
-            SizedBox(height: 20.0), // Add some spacing between the buttons
+                onPressed: () {
+                  setState(() {
+                    savedLevel = level;
+                  });
+
+                  updateLevelAndProgress(true);
+                  _showRandomBooksDialog(context);
+                  generateRandomBooks();
+                  setState(() {
+                    claimed = true;
+                  });
+
+                  print('claimed: $claimed');
+                },
+                child: Text(
+                    'Congratulations! You have reached level $currentLevel. Click here to claim your reward.'),
+              )
+            else
+              Text(
+                  'You are currently at level $currentLevel. Keep going to reach the next level!'),
+
+            // Display three random book titles
+            // for (var book in randomBooks)
+            //   ElevatedButton(
+            //     onPressed: () => _startDownload(book['title'], book['author']),
+            //     child: Text(book['title']),
+            //   ),
+            // SizedBox(height: 20.0), // Add some spacing between the buttons
             // Button to generate new random books
 
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  generateRandomBooks();
-                });
-              },
-              child: Text('Generate New Random Books'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       generateRandomBooks();
+            //     });
+            //   },
+            //   child: Text('Generate New Random Books'),
+            // ),
           ],
         ),
       ),

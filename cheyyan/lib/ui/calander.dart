@@ -1,3 +1,4 @@
+import 'package:cheyyan/controllers/ability_controller.dart';
 import 'package:cheyyan/controllers/task_controller.dart';
 import 'package:cheyyan/models/task.dart';
 import 'package:cheyyan/services/notification_service.dart';
@@ -25,6 +26,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _taskController = Get.put(TaskController());
+  final AbilityController _abilityController =
+      Get.put(AbilityController(), permanent: true);
   var notifyHelper;
   DateTime _selectedDate = DateTime.now();
   @override
@@ -93,35 +96,42 @@ class _HomePageState extends State<HomePage> {
             itemCount: _taskController.taskList.length,
             itemBuilder: (_, index) {
               Task task = _taskController.taskList[index];
-              if (task.repeat == "Daily") {
-                DateTime date =
-                    DateFormat.jm().parse(task.startTime.toString());
-                var myTime = DateFormat("HH:mm").format(date);
-                notifyHelper.scheduledNotification(
-                  int.parse(myTime.toString().split(":")[0]),
-                  int.parse(myTime.toString().split(":")[1]),
-                  task,
-                );
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  child: SlideAnimation(
-                    child: FadeInAnimation(
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                _taskController.getTasks();
-                                _showBottomSheet(context, task);
-                              },
-                              child: TaskTile(task))
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }
+              // DateTime date = DateFormat.jm().parse(task.startTime.toString());
+              // var myTime = DateFormat("HH:mm").format(date);
+              // notifyHelper.scheduledNotification(
+              //   int.parse(myTime.toString().split(":")[0]),
+              //   int.parse(myTime.toString().split(":")[1]),
+              //   task,
+              // );
+              // if (task.repeat == "Daily") {
+              //   DateTime date =
+              //       DateFormat.jm().parse(task.startTime.toString());
+              //   var myTime = DateFormat("HH:mm").format(date);
+              //   notifyHelper.scheduledNotification(
+              //     int.parse(myTime.toString().split(":")[0]),
+              //     int.parse(myTime.toString().split(":")[1]),
+              //     task,
+              //   );
+              //   return AnimationConfiguration.staggeredList(
+              //     position: index,
+              //     child: SlideAnimation(
+              //       child: FadeInAnimation(
+              //         child: Row(
+              //           children: [
+              //             GestureDetector(
+              //                 onTap: () {
+              //                   _taskController.getTasks();
+              //                   _showBottomSheet(context, task);
+              //                 },
+              //                 child: TaskTile(task))
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   );
+              // }
               if (task.date == DateFormat.yMd().format(_selectedDate)) {
-                _taskController.getTasks();
+                // _taskController.getTasks();
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   child: SlideAnimation(
@@ -130,7 +140,6 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           GestureDetector(
                               onTap: () {
-                                _taskController.getTasks();
                                 _showBottomSheet(context, task);
                               },
                               child: TaskTile(task))

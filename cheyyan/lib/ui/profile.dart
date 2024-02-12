@@ -35,7 +35,7 @@ enum AppState {
 }
 
 class _ProfileState extends State<Profile> {
-  final AbilityController _abilityController = Get.put(AbilityController());
+  final AbilityController _abilityController = Get.find();
 
   List<HealthDataPoint> _healthDataList = [];
   AppState _state = AppState.DATA_NOT_FETCHED;
@@ -109,7 +109,7 @@ class _ProfileState extends State<Profile> {
   Future<void> authorize() async {
     // Request necessary permissions
     await Permission.activityRecognition.request();
-    await Permission.location.request();
+    // await Permission.location.request();
 
     bool? hasPermissions =
         await health.hasPermissions(types, permissions: permissions);
@@ -159,9 +159,9 @@ class _ProfileState extends State<Profile> {
     }
 
     _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-    for (var x in _healthDataList) {
-      // print(x);
-    }
+    // for (var x in _healthDataList) {
+    //   // print(x);
+    // }
 
     setState(() {
       _state = _healthDataList.isEmpty ? AppState.NO_DATA : AppState.DATA_READY;
@@ -416,19 +416,18 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     String currentLevel = '';
-    double level = 0.0;
-    double maxLevel = 0;
+    double progress = 0.0;
+    double maxLevel = 1;
     File? _profileImage = File("images/profile.jpg");
 
     // print(_abilityController.abilityList);
     for (var x in _abilityController.abilityList) {
-      level = x.exp.toDouble() - x.exp.floor().toDouble();
+      progress = x.exp.toDouble() - x.exp.floor().toDouble();
       maxLevel = x.exp.ceil().toDouble() - x.exp.floor().toDouble();
-      currentLevel = x.exp.floor().toInt().toString();
-    }
-
-    if (maxLevel == 0) {
-      maxLevel = 1;
+      if (progress == 0.0 && maxLevel == 0.0) {
+        maxLevel += 1.0;
+      }
+      currentLevel = x.exp.floor().toString();
     }
 
     return Scaffold(
@@ -478,9 +477,9 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           actions: const [
-            CircleAvatar(
-              backgroundImage: AssetImage("images/profile.jpg"),
-            ),
+            // CircleAvatar(
+            //   backgroundImage: AssetImage("images/profile.jpg"),
+            // ),
             SizedBox(
               width: 20,
             ),
@@ -591,7 +590,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 10),
                 LinearProgressIndicator(
-                  value: level / maxLevel,
+                  value: progress / maxLevel,
                   backgroundColor: Colors.grey,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                 ),

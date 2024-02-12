@@ -13,7 +13,7 @@ class DBHelper2 {
     }
     try {
       String path = '${await getDatabasesPath()}abilities.db';
-      // deleteDatabase(path);
+      deleteDatabase(path);
       _db = await openDatabase(
         path,
         version: _version,
@@ -118,6 +118,7 @@ class DBHelper2 {
     return null;
   }
 
+//make leveling up difficult the more levels you get
   static incrProgress(String ability) async {
     if (ability == 'strength') {
       await _db!.rawUpdate(

@@ -7,7 +7,9 @@ class TaskController extends GetxController {
   var taskList = <Task>[].obs;
 
   Future<int> addTask({Task? task}) async {
-    return await DBHelper.insertTask(task);
+    int number = await DBHelper.insertTask(task);
+    getTasks();
+    return number;
   }
 
   void getTasks() async {
