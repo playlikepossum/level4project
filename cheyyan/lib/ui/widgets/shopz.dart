@@ -279,6 +279,29 @@ class _DownloadPageState extends State<DownloadPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // Header with Image
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Your Rewards Journey',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Level Progress
+            LinearProgressIndicator(
+              value: progress ?? 0.0,
+              backgroundColor: Colors.grey[300],
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+            SizedBox(height: 10),
+            // Level Info
             if (level! > barrier && progress! >= 0.0 && !claimed!)
               ElevatedButton(
                 onPressed: () {
@@ -295,30 +318,56 @@ class _DownloadPageState extends State<DownloadPage> {
 
                   print('claimed: $claimed');
                 },
-                child: Text(
-                    'Congratulations! You have reached level $currentLevel. Click here to claim your reward.'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Congratulations!',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'You have reached level $currentLevel.',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Click here to claim your reward.',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               )
             else
-              Text(
-                  'You are currently at level $currentLevel. Keep going to reach the next level!'),
-
-            // Display three random book titles
-            // for (var book in randomBooks)
-            //   ElevatedButton(
-            //     onPressed: () => _startDownload(book['title'], book['author']),
-            //     child: Text(book['title']),
-            //   ),
-            // SizedBox(height: 20.0), // Add some spacing between the buttons
-            // Button to generate new random books
-
-            // ElevatedButton(
-            //   onPressed: () {
-            //     setState(() {
-            //       generateRandomBooks();
-            //     });
-            //   },
-            //   child: Text('Generate New Random Books'),
-            // ),
+              // Level Progress Info
+              Column(
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    'You are currently at level $currentLevel.',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Keep going to reach the next level!',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ],
+              ),
           ],
         ),
       ),

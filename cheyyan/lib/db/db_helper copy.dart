@@ -186,6 +186,16 @@ class DBHelper2 {
     }
   }
 
+  static expBonus(double value) async {
+    return await _db!.rawUpdate(
+      '''
+    UPDATE $_abilitiesTableName
+    SET exp = exp + $value
+    WHERE id = 1
+  ''',
+    );
+  }
+
   static incrementAbilities(String ability) async {
     incrProgress(ability);
     double? progress = await DBHelper2.getProgress(ability);

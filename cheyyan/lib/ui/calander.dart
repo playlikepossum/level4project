@@ -26,6 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _taskController = Get.put(TaskController());
+  // ignore: unused_field
   final AbilityController _abilityController =
       Get.put(AbilityController(), permanent: true);
   var notifyHelper;

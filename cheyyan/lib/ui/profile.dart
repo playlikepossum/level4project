@@ -490,7 +490,7 @@ class _ProfileState extends State<Profile> {
             height: 250,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [bluishClr, darkGreyClr],
+                colors: [bluishClr, greenClr],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 stops: [0.5, 0.9],
@@ -561,7 +561,7 @@ class _ProfileState extends State<Profile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Abilities',
+                  'Stats:',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -593,6 +593,14 @@ class _ProfileState extends State<Profile> {
                   value: progress / maxLevel,
                   backgroundColor: Colors.grey,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Complete quests to level up quicker and gain more experience!',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                 ),
               ],
             ),
