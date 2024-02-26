@@ -63,6 +63,7 @@ dependencies:
   flutter_media_downloader: ^1.0.4
   wifi_ip_details :
   image_picker: ^0.8.4+4
+  shared_preferences: ^2.0.8
   
 
 

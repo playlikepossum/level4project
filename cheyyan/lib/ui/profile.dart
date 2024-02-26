@@ -129,10 +129,11 @@ class _ProfileState extends State<Profile> {
       //   print("Exception in authorize: $error");
       // }
     }
-
-    setState(() {
-      _state = (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED;
-    });
+    if (mounted) {
+      setState(() {
+        _state = (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED;
+      });
+    }
 
     if (authorized) {
       fetchData();

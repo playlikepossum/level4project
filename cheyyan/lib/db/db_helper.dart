@@ -14,7 +14,7 @@ class DBHelper {
     }
     try {
       String path = '${await getDatabasesPath()}tasks.db';
-      deleteDatabase(path);
+      // deleteDatabase(path);
       _db = await openDatabase(
         path,
         version: _version,
