@@ -45,6 +45,7 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
+    _abilityController.getAbilities();
     if (_state != AppState.AUTHORIZED) {
       authorize();
     } else {
@@ -143,7 +144,7 @@ class _ProfileState extends State<Profile> {
 
   Future<void> fetchData() async {
     setState(() => _state = AppState.FETCHING_DATA);
-    _abilityController.getAbilities();
+
     final now = DateTime.now();
     final yesterday = now.subtract(const Duration(hours: 24));
 
