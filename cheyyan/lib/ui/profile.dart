@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:cheyyan/auth/auth_gate.dart';
 import 'package:cheyyan/controllers/ability_controller.dart';
 import 'package:cheyyan/ui/calander.dart';
 import 'package:cheyyan/ui/quests.dart';
 import 'package:cheyyan/ui/theme.dart';
 import 'package:cheyyan/ui/widgets/shopz.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
@@ -498,7 +500,7 @@ class _ProfileState extends State<Profile> {
                 stops: [0.5, 0.9],
               ),
             ),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -562,14 +564,14 @@ class _ProfileState extends State<Profile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
+                const Text(
                   'Stats:',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Obx(
                   () => Column(
                     children: _abilityController.abilityList
@@ -588,21 +590,27 @@ class _ProfileState extends State<Profile> {
                 ),
                 Text(
                   ('Level: ${currentLevel}'),
-                  style: TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 24),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 LinearProgressIndicator(
                   value: progress / maxLevel,
                   backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
                 ),
-                SizedBox(height: 8),
-                Text(
+                const SizedBox(height: 8),
+                const Text(
                   'Complete quests to level up quicker and gain more experience!',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _showBottomSheet(context);
+                  },
+                  child: const Text('Sign Out'),
                 ),
               ],
             ),
@@ -658,5 +666,75 @@ class _ProfileState extends State<Profile> {
     //     ],
     //   ),
     // );
+  }
+
+  _showBottomSheet(
+    BuildContext context,
+  ) {
+    Get.bottomSheet(Container(
+      padding: const EdgeInsets.only(top: 4),
+      color: Get.isDarkMode ? darkGreyClr : white,
+      height: MediaQuery.of(context).size.height * 0.18,
+      child: Column(
+        children: [
+          Container(
+            height: 6,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]),
+          ),
+          const Spacer(),
+          SignOutButton(),
+          _bottomSheetButton(
+            label: "Close",
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AuthGate()),
+              );
+            },
+            clr: pinkClr,
+            isClose: true,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    ));
+  }
+
+  _bottomSheetButton({
+    required String label,
+    required Function()? onTap,
+    required Color clr,
+    bool isClose = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 55,
+        width: MediaQuery.of(context).size.width * 0.9,
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: isClose == true
+                ? Get.isDarkMode
+                    ? Colors.grey[600]!
+                    : Colors.grey[300]!
+                : clr,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          color: isClose == true ? Colors.transparent : clr,
+        ),
+        child: Center(
+          child: Text(label,
+              style: isClose
+                  ? titleStyle
+                  : titleStyle.copyWith(color: Colors.white)),
+        ),
+      ),
+    );
   }
 }

@@ -13,7 +13,7 @@ class DBHelper2 {
     }
     try {
       String path = '${await getDatabasesPath()}abilities.db';
-      // deleteDatabase(path);
+      deleteDatabase(path);
       _db = await openDatabase(
         path,
         version: _version,

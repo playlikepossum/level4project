@@ -17,14 +17,14 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CalanderPage extends StatefulWidget {
+  const CalanderPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CalanderPage> createState() => _CalanderPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _CalanderPageState extends State<CalanderPage> {
   final _taskController = Get.put(TaskController());
   // ignore: unused_field
   final AbilityController _abilityController =

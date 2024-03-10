@@ -48,6 +48,8 @@ dependencies:
   permission_handler:
   health: ^8.1.0
   flutterfire_cli:
+  firebase_auth: "4.12.0"
+  firebase_ui_auth:
   firebase_core:
   google_sign_in:
   http: ^0.13.3
@@ -64,6 +66,7 @@ dependencies:
   wifi_ip_details :
   image_picker: ^0.8.4+4
   shared_preferences: ^2.0.8
+  firebase_ui_oauth_google:
   
 
 

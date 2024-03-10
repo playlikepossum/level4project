@@ -185,7 +185,6 @@ class _DownloadPageState extends State<DownloadPage> {
     {'title': 'The Count of Monte Cristo', 'author': 'Alexandre Dumas'},
     {'title': 'Treasure Island', 'author': 'Robert Louis Stevenson'},
     {'title': 'Walden', 'author': 'Henry David Thoreau'},
-    {'title': 'The Odyssey', 'author': 'Homer'},
 
     // More books...
   ];
