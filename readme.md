@@ -4,36 +4,36 @@ Cheyyan is a time management application designed to gamify the process of manag
 
 ## File Structure
 
-cheyyan/
-├── android/
-├── assets/
-│ ├── images/
-│ │ └── cheyyan.png
-├── ios/
-├── lib/
-│ ├── auth/
-│ │ ├── auth_gate.dart
-│ ├── ui/
-│ │ ├── add_task_page.dart
-│ │ ├── calander.dart
-│ │ ├── quests_page.dart
-│ │ ├── login_signup_page.dart
-│ │ └── profile.dart
-│ ├── models/
-│ | ├── abilites.dart
-│ │ ├── task.dart
-│ ├── services/
-│ │ ├── notification_service.dart
-│ │ └── theme_service.dart
-│ ├── widgets/
-│ │ └── button.dart
-│ │ └── input_field.dart
-│ │ └── shopz.dart
-│ │ └── task_tile.dart
-│ └── main.dart
-├── test/
-├── pubspec.yaml
-└── README.md
+cheyyan/ \
+├── android/ \
+├── assets/ \
+│ ├── images/ \
+│ │ └── cheyyan.png \
+├── ios/ \
+├── lib/ \
+│ ├── auth/ \
+│ │ ├── auth_gate.dart \
+│ ├── ui/ \
+│ │ ├── add_task_page.dart \
+│ │ ├── calander.dart   \
+│ │ ├── quests_page.dart  \
+│ │ ├── login_signup_page.dart \
+│ │ └── profile.dart \
+│ ├── models/ \
+│ | ├── abilites.dart \
+│ │ ├── task.dart \
+│ ├── services/ \
+│ │ ├── notification_service.dart \
+│ │ └── theme_service.dart \
+│ ├── widgets/ \
+│ │ └── button.dart \
+│ │ └── input_field.dart \
+│ │ └── shopz.dart \
+│ │ └── task_tile.dart \
+│ └── main.dart \
+├── test/ \
+├── pubspec.yaml \
+└── README.md 
 
 
 ## Build Instructions
