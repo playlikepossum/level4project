@@ -61,7 +61,7 @@ class _CalanderPageState extends State<CalanderPage> {
               },
             ),
             ListTile(
-              title: const Text('Shop'),
+              title: const Text('Rewards'),
               onTap: () async {
                 await Get.to(() => DownloadPage());
               },
@@ -179,6 +179,7 @@ class _CalanderPageState extends State<CalanderPage> {
               : _bottomSheetButton(
                   label: "Task Completed",
                   onTap: () {
+                    _abilityController.getAbilities();
                     _taskController.markTaskCompleted(task.id!);
                     Get.back();
                   },

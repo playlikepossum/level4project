@@ -27,6 +27,18 @@ class AbilityController extends GetxController {
     getAbilities();
   }
 
+  Future<int?> getPrize() async {
+    getAbilities();
+    int? number = await DBHelper2.getPrize();
+    return number;
+  }
+
+  void setPrize() async {
+    getAbilities();
+    await DBHelper2.updatePrize(0);
+    getAbilities();
+  }
+
   void incrementAbilityName(String ability) async {
     await DBHelper2.incrementAbilities(ability);
     getAbilities();

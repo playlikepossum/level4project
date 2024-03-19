@@ -149,6 +149,7 @@ class _DownloadPageState extends State<DownloadPage> {
   String? currentLevel;
   double? progress;
   double? maxLevel;
+  int? prize;
   double? level;
   double? savedLevel;
   int barrier = 1;
@@ -292,7 +293,7 @@ class _DownloadPageState extends State<DownloadPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Random Books'),
+          title: Text('Pick Your Prize'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -388,10 +389,21 @@ class _DownloadPageState extends State<DownloadPage> {
       currentLevel = x.exp.floor().toInt().toString();
 
       level = x.exp.toDouble();
+
+      prize = x.prize;
     }
 
+    print('level: $level');
+    print('savedlevel: ${levelz2.savedLevel}');
+    print('barier: $barrier');
+    print('progress: $progress');
+    print('maxlevel: $maxLevel');
+    print('currentlevel: $currentLevel');
+    print(claimed);
+    print('levelz2 claimed: ${levelz2.claimed}');
+
     return FutureBuilder(
-        future: levelProvider._loadLevel(),
+        future: _abilityController.getPrize(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
@@ -438,29 +450,34 @@ class _DownloadPageState extends State<DownloadPage> {
                     ),
                     SizedBox(height: 10),
                     // Level Info
-                    if (level! > barrier &&
-                        progress! >= 0.0 &&
-                        !levelz2.claimed!)
+                    if (prize == 1)
                       ElevatedButton(
                         onPressed: () {
-                          if (level! > levelz2.savedLevel! &&
-                              level! > barrier) {
-                            setState(() {
-                              claimed = false;
-                              levelProvider.setclaimed(levelz2);
-                              levelz2.savedLevel = level!;
-                              levelProvider.setSavedLevel(
-                                  levelz2, levelz2.savedLevel);
-                            });
-                          } else {
-                            setState(() {
-                              levelz2.claimed = true;
-                            });
-                          }
+                          // if (level! > levelz2.savedLevel! &&
+                          //     level! > barrier) {
+                          //   setState(() {
+                          //     claimed = false;
+                          //     levelz2.claimed = false;
+                          //     levelProvider.setclaimed(levelz2);
+                          //     levelz2.savedLevel = level!;
+
+                          //     levelProvider.setSavedLevel(
+                          //         levelz2, levelz2.savedLevel);
+                          //   });
+                          // } else {
+                          //   setState(() {
+                          //     levelz2.claimed = true;
+                          //   });
+                          // }
 
                           // updateLevelAndProgress(true);
+
                           _showRandomBooksDialog(context);
                           generateRandomBooks();
+                          setState(() {
+                            _abilityController.setPrize();
+                            prize = 0;
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,

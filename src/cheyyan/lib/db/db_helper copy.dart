@@ -34,13 +34,14 @@ class DBHelper2 {
         intprogress REAL DEFAULT 0.0 NOT NULL,
         chrprogress REAL DEFAULT 0.0 NOT NULL,
         conprogress REAL DEFAULT 0.0 NOT NULL,
-        exp REAL DEFAULT 1.0 NOT NULL
+        exp REAL DEFAULT 1.0 NOT NULL,
+        prize BOOLEAN DEFAULT 0 NOT NULL
       )
     ''');
           await db.execute('''
       INSERT INTO $_abilitiesTableName 
-      (strength, intelligence, charisma, constitution,strprogress,intprogress, chrprogress, conprogress, exp)
-      VALUES (5, 5, 5, 5, 0.0,0.0,0.0,0.0,1.0)
+      (strength, intelligence, charisma, constitution,strprogress,intprogress, chrprogress, conprogress, exp, prize)
+      VALUES (5, 5, 5, 5, 0.0,0.0,0.0,0.0,1.0,0)
     ''');
         },
       );
@@ -109,18 +110,47 @@ class DBHelper2 {
     if (ability == 'exp') {
       List<Map<String, dynamic>> result = await _db!.query(
         _abilitiesTableName,
-        columns: ['conprogress'],
+        columns: ['exp'],
         where: 'id = ?',
         whereArgs: [1],
       );
-      return result.isNotEmpty ? result.first['conprogress'] as double : null;
+      return result.isNotEmpty ? result.first['exp'] as double : null;
     }
+    return null;
+  }
+
+  static Future<void> updatePrize(int id) async {
+    await _db!.rawUpdate(
+      '''
+    UPDATE $_abilitiesTableName
+    SET prize = ?
+    WHERE id = 1
+  ''',
+      [id],
+    );
+  }
+
+  static Future<int?> getPrize() async {
+    List<Map> result = await _db!.rawQuery(
+      '''
+    SELECT prize
+    FROM $_abilitiesTableName
+    WHERE id = ?
+  ''',
+      [1],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first['prize'] as int?;
+    }
+
     return null;
   }
 
 //make leveling up difficult the more levels you get
   static incrProgress(String ability) async {
     if (ability == 'strength') {
+      double former = await getProgress('exp') as double;
       await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -128,6 +158,10 @@ class DBHelper2 {
     WHERE id = 1
   ''',
       );
+      double later = await getProgress('exp') as double;
+      if (later.floor() > former.floor()) {
+        updatePrize(1);
+      }
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -137,6 +171,7 @@ class DBHelper2 {
       );
     }
     if (ability == 'intelligence') {
+      double former = await getProgress('exp') as double;
       await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -144,6 +179,10 @@ class DBHelper2 {
     WHERE id = 1
   ''',
       );
+      double later = await getProgress('exp') as double;
+      if (later.floor() > former.floor()) {
+        updatePrize(1);
+      }
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -153,6 +192,7 @@ class DBHelper2 {
       );
     }
     if (ability == 'charisma') {
+      double former = await getProgress('exp') as double;
       await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -160,6 +200,10 @@ class DBHelper2 {
     WHERE id = 1
   ''',
       );
+      double later = await getProgress('exp') as double;
+      if (later.floor() > former.floor()) {
+        updatePrize(1);
+      }
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -169,6 +213,7 @@ class DBHelper2 {
       );
     }
     if (ability == 'constitution') {
+      double former = await getProgress('exp') as double;
       await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -176,6 +221,10 @@ class DBHelper2 {
     WHERE id = 1
   ''',
       );
+      double later = await getProgress('exp') as double;
+      if (later.floor() > former.floor()) {
+        updatePrize(1);
+      }
       return await _db!.rawUpdate(
         '''
     UPDATE $_abilitiesTableName
@@ -187,13 +236,20 @@ class DBHelper2 {
   }
 
   static expBonus(double value) async {
-    return await _db!.rawUpdate(
+    double former = await getProgress('exp') as double;
+    print(former);
+    await _db!.rawUpdate(
       '''
     UPDATE $_abilitiesTableName
     SET exp = exp + $value
     WHERE id = 1
   ''',
     );
+    double later = await getProgress('exp') as double;
+    print(later);
+    if (later.floor() > former.floor()) {
+      updatePrize(1);
+    }
   }
 
   static incrementAbilities(String ability) async {
