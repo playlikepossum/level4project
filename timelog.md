@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Timelog
 
 * Gamification of Time Management
