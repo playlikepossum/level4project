@@ -1,27 +1,59 @@
-# Guidance
-This is a suggested template for a project. You can modify it as you please, but
-but remember to keep:
+# Cheyyan
 
-* a timelog, updated regularly in the `timelog.md` format;
-* all source under version control;
-* data well organised and with appropriate ethical approval (for human subject data);
+Cheyyan is a time management application designed to gamify the process of managing tasks, improving productivity, and tracking progress. The application incorporates various features aimed at motivating users to efficiently manage their time and achieve their goals.
 
-Here's an overview of the structure as it stands:
+## File Structure
 
-* `timelog.md` The time log for your project.
-* `plan.md` A skeleton week-by-week plan for the project. 
-* `data/` data you acquire during the project
-* `src/` source code for your project
-* `status_report/` the status report submitted in December
-* `meetings/` Records of the meetings you have during the project.
-* `dissertation/` source and for your project dissertation
-* `presentation/` your presentation
+cheyyan/ \
+├── android/ \
+├── assets/ \
+│ ├── images/ \
+│ │ └── cheyyan.png \
+├── ios/ \
+├── lib/ \
+│ ├── auth/ \
+│ │ ├── auth_gate.dart \
+│ ├── ui/ \
+│ │ ├── add_task_page.dart \
+│ │ ├── calander.dart   \
+│ │ ├── quests_page.dart  \
+│ │ ├── login_signup_page.dart \
+│ │ └── profile.dart \
+│ ├── models/ \
+│ | ├── abilites.dart \
+│ │ ├── task.dart \
+│ ├── services/ \
+│ │ ├── notification_service.dart \
+│ │ └── theme_service.dart \
+│ ├── widgets/ \
+│ │ └── button.dart \
+│ │ └── input_field.dart \
+│ │ └── shopz.dart \
+│ │ └── task_tile.dart \
+│ └── main.dart \
+├── test/ \
+├── pubspec.yaml \
+└── README.md 
 
-* Make sure you add a `.gitignore` or similar for your VCS for the tools you are using!
-* Add any appropriate continuous integration (e.g. Travis CI) in this directory.
 
-* Remove this `readme.md` file from any repository and replace it with something more appropriate!
+## Build Instructions
 
-## Important
-* It should be easy to rebuild and run your project and your dissertation
-        * Include clear instructions in the relevant directories to make this possible
+### Requirements
+
+* Flutter SDK (version >=3.1.3 <4.0.0)
+* Packages listed in `pubspec.yaml`
+* Tested on Windows 10
+
+### Build Steps
+
+1. Clone the repository: `git clone https://github.com/your-repo.git`
+2. Navigate to the project directory: `cd cheyyan`
+3. Run `flutter pub get` to install dependencies.
+4. Run `flutter run` to build and run the application on an android emulator running a recenent android version.
+
+
+### Test Steps
+
+* In the .\src\cheyyan\build\app\outputs\apk\release\app-release.apk section download the apk file and install on an android device
+* Start the application by running `flutter run` and verify functionality such as task creation, reminders, and quest completion.
+
