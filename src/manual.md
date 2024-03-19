@@ -14,7 +14,7 @@ git clone https://github.com/playlikepossum/level4project.git
 Navigate to the Cheyyan directory:
 
 ```bash
-cd cheyyan
+cd /src/cheyyan
 ```
 
 Run the following command to install the project dependencies:
@@ -30,6 +30,14 @@ flutter run
 ```
 
 This command will build and launch the Cheyyan app on your connected device or emulator.
+
+## Installation for Android Device
+Go to this directory and install the .apk file in your android device for it to run!
+
+```bash
+cd src/cheyyan/build/app/outputs/apk/release/app-release.apk
+```
+
 
 # Features
 
