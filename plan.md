@@ -1,83 +1,99 @@
-<<<<<<< HEAD
 # Plan
 
-* PROJECT TITLE
-* YOUR NAME
-* STUDENT ID
-* SUPERVISOR NAME
-
-Week-by-week plan for the whole project. Update this as you go along.
+* **PROJECT TITLE:** Gamification of Time Management
+* **YOUR NAME:** Sharon Padippurackal
+* **STUDENT ID:** 2558994p
+* **SUPERVISOR NAME:** Xianghua (Sharon) Ding
 
 ## Winter semester
 
 * **Week 1**
+  - Plan semester 1 tasks
+  - Research sprite animation libraries
+
 * **Week 2**
+  - Create GitLab repository
+  - Meet with supervisor
+  - Read research papers
+
 * **Week 3**
+  - Wireframing in Figma
+  - Meet with supervisor
+  - Revise and add more to wireframe
+
 * **Week 4**
+  - Meet with supervisor
+  - Learn Flutter through tutorials
+
 * **Week 5**
+  - Meet with supervisor
+
 * **Week 6**
+  - Firebase and Kotlin tutorials
+
 * **Week 7**
+  - Resolve Flutter package issues
+
 * **Week 8**
+  - Debug Flutter code
+  - Refactor UI components
+
 * **Week 9**
+  - Integrate Firestore database
+  - Design database schema
+
 * **Week 10**
-* **Week 11 [PROJECT WEEK]**
-* **Week 12 [PROJECT WEEK]** Status report submitted.
+  - Develop user profile functionality
+  - Resolve compatibility issues with Flutter packages
+
+* **Week 11**
+  - Create task management UI
+  - Implement task creation and deletion features
+
+* **Week 12**
+  - Fix bugs identified during testing
+  - Finalize UI design elements
+  - Write progress report for semester evaluation
 
 ## Winter break
 
 ## Spring Semester
 
 * **Week 13**
+  - Plan semester 2 tasks
+
 * **Week 14**
+  - Add incentives feature
+  - Prepare materials for user studies
+
 * **Week 15**
+  - Find free PDF books using APIs
+  - Conduct surveys and user testing
+
 * **Week 16**
+  - Write progress report
+  - Continue user testing
+
 * **Week 17**
+  - Deploy API for free PDF books
+  - Finish introduction section of dissertation
+
 * **Week 19**
+  - Conduct user studies
+  - Consider adding personality test to application
+
 * **Week 20**
+  - Write Background to Implementation on the dissertation
+  - Analyze user study results
+
 * **Week 21**
+  - Finalize dissertation and prepare for submission
+
 * **Week 22**
+  - Finalize dissertation and prepare for submission
+
 * **Week 23 [TERM ENDS]**
-* **Week 24** Dissertation submission deadline and presentations.
+  - Finalize dissertation and prepare for submission
 
-=======
-# Plan
-
-* PROJECT TITLE
-* YOUR NAME
-* STUDENT ID
-* SUPERVISOR NAME
-
-Week-by-week plan for the whole project. Update this as you go along.
-
-## Winter semester
-
-* **Week 1**
-* **Week 2**
-* **Week 3**
-* **Week 4**
-* **Week 5**
-* **Week 6**
-* **Week 7**
-* **Week 8**
-* **Week 9**
-* **Week 10**
-* **Week 11 [PROJECT WEEK]**
-* **Week 12 [PROJECT WEEK]** Status report submitted.
-
-## Winter break
-
-## Spring Semester
-
-* **Week 13**
-* **Week 14**
-* **Week 15**
-* **Week 16**
-* **Week 17**
-* **Week 19**
-* **Week 20**
-* **Week 21**
-* **Week 22**
-* **Week 23 [TERM ENDS]**
-* **Week 24** Dissertation submission deadline and presentations.
-
->>>>>>> 0a6420cc825326b5b35ee3a8a2ad866a0e71b3c7
+* **Week 24**
+  - Dissertation submission deadline and presentations.
